@@ -1,8 +1,11 @@
 import React from "react";
-import { useEffect } from "react";
-import { useRef } from "react";
-import { useState } from "react";
-// import { fontAwesome } from "fontawesome";
+import { useEffect, useRef, useState } from "react";
+import {
+  faCheck,
+  faTimes,
+  faInfoCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -26,9 +29,9 @@ const Register = () => {
   const [success, setSuccess] = useState("");
   const [errMsg, setErrMsg] = useState("");
 
-  // useEffect(() => {
-  //   useRef.current.focus();
-  // }, []);
+  useEffect(() => {
+    userRef.current.focus();
+  }, []);
 
   useEffect(() => {
     const result = USER_REGEX.test(user);
@@ -83,17 +86,16 @@ const Register = () => {
             {errMsg}
           </p>
 
-          <form className="form-control" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
             <h1>REGISTER</h1>
 
             <label htmlFor="username">
               UserName
               <span className={validName ? "valid" : "hide"}>
-                {/* <fontAwesome icon = {faCheck}/> */}
-                <i className="fa fa-check"></i>
+                <FontAwesomeIcon icon={faCheck} />
               </span>
               <span className={validName || !user ? "hide" : "invalid"}>
-                <i className="fa fa-times"></i>
+                <FontAwesomeIcon icon={faTimes} />
               </span>
             </label>
             <input
@@ -125,11 +127,10 @@ const Register = () => {
             <label htmlFor="password">
               Password
               <span className={validPasswrd ? "valid" : "hide"}>
-                {/* <fontAwesome icon = {faCheck}/> */}
-                <i className="fa fa-check"></i>
+                <FontAwesomeIcon icon={faCheck} />
               </span>
               <span className={validPasswrd || !pwd ? "hide" : "invalid"}>
-                <i className="fa fa-times"></i>
+                <FontAwesomeIcon icon={faTimes} />
               </span>
             </label>
             <input
@@ -166,11 +167,10 @@ const Register = () => {
             <label htmlFor="cpassword">
               Confirm Password
               <span className={validMatch ? "valid" : "hide"}>
-                {/* <fontAwesome icon = {faCheck}/> */}
-                <i className="fa fa-check"></i>
+                <FontAwesomeIcon icon={faCheck} />
               </span>
               <span className={validMatch || !matchPwd ? "hide" : "invalid"}>
-                <i className="fa fa-times"></i>
+                <FontAwesomeIcon icon={faTimes} />
               </span>
             </label>
             <input
@@ -190,7 +190,7 @@ const Register = () => {
                 matchFocus && pwd && !validMatch ? "instructions" : "offscreen"
               }
             >
-              <i className="fa fa-info-circle" />
+              <FontAwesomeIcon icon={faInfoCircle} />
               Must be same with first Password input
             </p>
             <br />

@@ -17,9 +17,9 @@ const Login = () => {
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
 
-  //   useEffect(() => {
-  //     useRef.current.focus();
-  //   }, []);
+  useEffect(() => {
+    userRef.current.focus();
+  }, []);
 
   useEffect(() => {
     setErrMsg("");
