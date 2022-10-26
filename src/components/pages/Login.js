@@ -1,9 +1,14 @@
 import React from "react";
 import { useEffect } from "react";
 import { useRef } from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import AuthContext from "../context/AuthProvide";
+import axios from "../../api/axios";
+
+const LOGIN_URL = "/auth";
 
 const Login = () => {
+  const { setAuth } = useContext(AuthContext);
   const [user, setUser] = useState("");
   const [passwrd, setPasswrd] = useState("");
   const userRef = useRef();
@@ -20,11 +25,38 @@ const Login = () => {
     setErrMsg("");
   }, [user, passwrd]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setUser("");
-    setPasswrd("");
-    setSuccess(true);
+    try {
+      const response = await axios.post(
+        LOGIN_URL,
+        JSON.stringify({ user, passwrd }),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      console.log(JSON.stringify(response?.data));
+
+      const accessToken = response?.data?.accessToken;
+      const roles = response?.data?.roles;
+
+      setAuth({ user, passwrd, roles, accessToken });
+      setUser("");
+      setPasswrd("");
+      setSuccess(true);
+    } catch (error) {
+      if (!error?.response) {
+        setErrMsg("No Server Response");
+      } else if (error.response?.status === 400) {
+        setErrMsg("Missing Username and Password");
+      } else if (error.response?.status === 401) {
+        setErrMsg("UnAuthorize");
+      } else {
+        setErrMsg("Login failed");
+      }
+      errRef.current.focus();
+    }
   };
   return (
     <>
@@ -46,11 +78,7 @@ const Login = () => {
           </p>
 
           <div className="col-md-4 form-control">
-            <form
-              action=""
-              onSubmit={handleSubmit}
-              className="form-control px-20 mt-8"
-            >
+            <form onSubmit={handleSubmit} className="form-control px-20 mt-8">
               <h1>LOGIN HERE</h1>
               <input
                 type="text"

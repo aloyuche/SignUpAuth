@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+section {
+  background-color: #04112a;
+  color: aliceblue;
+  box-shadow: 2px 3px 1px #61dafb;
+  width: 400px;
+  margin: 0 40%;
+  justify-content: center;
+}
