@@ -1,5 +1,6 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
+// import styled from "styled-components";
 import {
   faCheck,
   faTimes,
@@ -39,15 +40,11 @@ const Register = () => {
 
   useEffect(() => {
     const result = USER_REGEX.test(user);
-    console.log(result);
-    console.log(user);
     setValidName(result);
   }, [user]);
 
   useEffect(() => {
     const result = PWD_REGEX.test(pwd);
-    console.log(result);
-    console.log(pwd);
     setValidPasswrd(result);
     const match = pwd === matchPwd;
     setValidMatch(match);
@@ -80,14 +77,18 @@ const Register = () => {
       console.log(response.data);
       console.log(response.accessToken);
       console.log(JSON.stringify(response));
+
       setSuccess(true);
+      setUser("");
+      setPwd("");
+      setMatchPwd("");
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");
       } else if (err.response?.status === 400) {
         setErrMsg("Missing Username and Password");
       } else if (err.response?.status === 409) {
-        setErrMsg("Username Token");
+        setErrMsg("Username Taken");
       } else {
         setErrMsg("Registration failed");
       }
@@ -101,11 +102,11 @@ const Register = () => {
         <section>
           <h1>Success!</h1> <br />
           <p>
-            <a href="/login">Logi In</a>
+            <a href="/login">Log In</a>
           </p>
         </section>
       ) : (
-        <FormContainer>
+        <section>
           <p
             ref={errRef}
             className={errMsg ? "errmsg" : "offscreen"}
@@ -120,12 +121,14 @@ const Register = () => {
             <label htmlFor="username">
               <FontAwesomeIcon icon={faUserCircle} />
               UserName
-              <span className={validName ? "valid" : "hide"}>
-                <FontAwesomeIcon icon={faCheck} />
-              </span>
-              <span className={validName || !user ? "hide" : "invalid"}>
-                <FontAwesomeIcon icon={faTimes} />
-              </span>
+              <FontAwesomeIcon
+                icon={faCheck}
+                className={validName ? "valid" : "hide"}
+              />
+              <FontAwesomeIcon
+                icon={faTimes}
+                className={validName || !user ? "hide" : "invalid"}
+              />
             </label>
             <br />
             <input
@@ -156,19 +159,21 @@ const Register = () => {
 
             <label htmlFor="password">
               <FontAwesomeIcon icon={faUserPen} /> Password
-              <span className={validPasswrd ? "valid" : "hide"}>
-                <FontAwesomeIcon icon={faCheck} />
-              </span>
-              <span className={validPasswrd || !pwd ? "hide" : "invalid"}>
-                <FontAwesomeIcon icon={faTimes} />
-              </span>
+              <FontAwesomeIcon
+                icon={faCheck}
+                className={validPasswrd ? "valid" : "hide"}
+              />
+              <FontAwesomeIcon
+                icon={faTimes}
+                className={validPasswrd || !pwd ? "hide" : "invalid"}
+              />
             </label>
             <br />
             <input
               type="password"
               onChange={(e) => setPwd(e.target.value)}
               id="password"
-              aria-invalid={validPasswrd ? "false" : "true"}
+              aria-invalid={validPasswrd ? "true" : "false"}
               aria-describedby="pwdnote"
               onFocus={() => setPasswrdFocus(true)}
               onBlur={() => setPasswrdFocus(false)}
@@ -199,19 +204,21 @@ const Register = () => {
               {" "}
               <FontAwesomeIcon icon={faUserPen} />
               Confirm Password
-              <span className={validMatch ? "valid" : "hide"}>
-                <FontAwesomeIcon icon={faCheck} />
-              </span>
-              <span className={validMatch || !matchPwd ? "hide" : "invalid"}>
-                <FontAwesomeIcon icon={faTimes} />
-              </span>
+              <FontAwesomeIcon
+                icon={faCheck}
+                className={validMatch ? "valid" : "hide"}
+              />
+              <FontAwesomeIcon
+                icon={faTimes}
+                className={validMatch || !matchPwd ? "hide" : "invalid"}
+              />
             </label>
             <br />
             <input
               type="password"
               onChange={(e) => setMatchPwd(e.target.value)}
               id="cpassword"
-              aria-invalid={validMatch ? "false" : "true"}
+              aria-invalid={validMatch ? "true" : "false"}
               aria-describedby="matchnote"
               onFocus={() => setMatchFocus(true)}
               onBlur={() => setMatchFocus(false)}
@@ -230,7 +237,7 @@ const Register = () => {
               <FontAwesomeIcon icon={faInfoCircle} />
               Must be same with first Password input
             </p>
-
+            <br />
             <button
               disabled={
                 !validMatch || !validName || !validPasswrd ? "true" : "false"
@@ -242,70 +249,76 @@ const Register = () => {
             </button>
           </form>
           <p>
-            Already a Member Please
+            Already a Member Please <br />
             <span>
               <a href="/login">Sign In</a>
             </span>
           </p>
-        </FormContainer>
+        </section>
       )}
     </>
   );
 };
 
-const FormContainer = styled.div`
-    height: 100vh;
-    width: 100vw;
-    gap = 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: colunm;
-    background:#131324;
-    .brand{
-        display:flex;
-        justify-content: center;
-        align-items:center;
-        gap: 1rem;
-        h1{
-        font-size:2.8rem;
-        color:white;
-        
-        }
-        img{
-            width: 20%;
-        }
-    }
-    form{
-        display: flex;
-        flex-direction: column;
-        gap:1.2rem;
-        background:#00000076;
-        border-radius:2rem;
-        padding: 2rem 4rem;
+// const FormContainer = styled.div``;
+//     height: 100vh;
+//     width: 100vw;
+//     gap = 1rem;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     flex-direction: colunm;
+//     background:#131324;
+//     .errmsg{
+//       display:none;
+//     }
+//     .offscreen{
+//       display:block;
+//     }
+//     .brand{
+//         display:flex;
+//         justify-content: center;
+//         align-items:center;
+//         gap: 1rem;
+//         h1{
+//         font-size:2.8rem;
+//         color:white;
 
-        input{
-            border:0.1px solid #4e0eff;
-            padding: 1rem;
-            background: transparent;
-            border-radius: 0.4rem;
-            color:white;
-            width:100%;
-            font-size:1rem;
-            
-        }
+//         }
+//         img{
+//             width: 20%;
+//         }
+//     }
+//     form{
+//         display: flex;
+//         flex-direction: column;
+//         gap:1.2rem;
+//         background:#00000076;
+//         border-radius:2rem;
+//         padding: 2rem 4rem;
 
-    }
-    button{
-        padding: 1rem 2rem;
-        background: #997af0;
-        color:white;
-        width:100%;
-        font-weight:bold;
-        border-radius: 1rem;
-    }
-    p{
-        color: orange;
-        font-size:1.2rem
-    }`;
+//         input{
+//             border:0.1px solid #4e0eff;
+//             padding: 1rem;
+//             background: transparent;
+//             border-radius: 0.4rem;
+//             color:white;
+//             width:100%;
+//             font-size:1rem;
+
+//         }
+
+//     }
+//     button{
+//         padding: 1rem 2rem;
+//         background: #997af0;
+//         color:white;
+//         width:100%;
+//         font-weight:bold;
+//         border-radius: 1rem;
+//     }
+//     p{
+//         color: orange;
+//         font-size:1.2rem
+//     }`;
 export default Register;
