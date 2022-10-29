@@ -3,12 +3,16 @@ import { useEffect, useRef, useState } from "react";
 import {
   faCheck,
   faTimes,
+  faUserCircle,
+  faUserPen,
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "../../api/axios";
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const REGISTER_URL = "/register";
 
 const Register = () => {
   const userRef = useRef();
@@ -64,7 +68,31 @@ const Register = () => {
       return;
     }
 
-    setSuccess(true);
+    try {
+      const response = await axios.post(
+        REGISTER_URL,
+        JSON.stringify({ user, pwd }),
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+      console.log(response.data);
+      console.log(response.accessToken);
+      console.log(JSON.stringify(response));
+      setSuccess(true);
+    } catch (err) {
+      if (!err?.response) {
+        setErrMsg("No Server Response");
+      } else if (err.response?.status === 400) {
+        setErrMsg("Missing Username and Password");
+      } else if (err.response?.status === 409) {
+        setErrMsg("Username Token");
+      } else {
+        setErrMsg("Registration failed");
+      }
+      errRef.current.focus();
+    }
   };
 
   return (
@@ -90,6 +118,7 @@ const Register = () => {
             <h1>REGISTER</h1>
 
             <label htmlFor="username">
+              <FontAwesomeIcon icon={faUserCircle} />
               UserName
               <span className={validName ? "valid" : "hide"}>
                 <FontAwesomeIcon icon={faCheck} />
@@ -98,6 +127,7 @@ const Register = () => {
                 <FontAwesomeIcon icon={faTimes} />
               </span>
             </label>
+            <br />
             <input
               type="text"
               onChange={(e) => setUser(e.target.value)}
@@ -110,6 +140,7 @@ const Register = () => {
               onBlur={() => setUserFocus(false)}
               value={user}
               required
+              className="form-control "
             />
             <p
               id="uidnote"
@@ -117,15 +148,14 @@ const Register = () => {
                 userFocus && user && !validName ? "instructions" : "offscreen"
               }
             >
-              <i className="fa fa-info-circle" />
+              <FontAwesomeIcon icon={faInfoCircle} />
               4 to 24 characters <br />
               Must begin with a letter. <br />
               Letters, number, underscores allowed
             </p>
-            <br />
 
             <label htmlFor="password">
-              Password
+              <FontAwesomeIcon icon={faUserPen} /> Password
               <span className={validPasswrd ? "valid" : "hide"}>
                 <FontAwesomeIcon icon={faCheck} />
               </span>
@@ -133,6 +163,7 @@ const Register = () => {
                 <FontAwesomeIcon icon={faTimes} />
               </span>
             </label>
+            <br />
             <input
               type="password"
               onChange={(e) => setPwd(e.target.value)}
@@ -141,8 +172,9 @@ const Register = () => {
               aria-describedby="pwdnote"
               onFocus={() => setPasswrdFocus(true)}
               onBlur={() => setPasswrdFocus(false)}
-              value={user}
+              value={pwd}
               required
+              className="form-control fas fa-lock"
             />
             <p
               id="pwdnote"
@@ -152,7 +184,7 @@ const Register = () => {
                   : "offscreen"
               }
             >
-              <i className="fa fa-info-circle" />
+              <FontAwesomeIcon icon={faInfoCircle} />
               8 to 24 characters <br />
               Must include uppercase and lowercase letters, a number and a
               special character. <br />
@@ -161,10 +193,11 @@ const Register = () => {
               <span aria-label="at symbol">@</span>{" "}
               <span aria-label="hashtag">#</span>{" "}
               <span aria-label="dollar sign">$</span>
+              <span aria-label="percentage">%</span>
             </p>
-            <br />
-
             <label htmlFor="cpassword">
+              {" "}
+              <FontAwesomeIcon icon={faUserPen} />
               Confirm Password
               <span className={validMatch ? "valid" : "hide"}>
                 <FontAwesomeIcon icon={faCheck} />
@@ -173,6 +206,7 @@ const Register = () => {
                 <FontAwesomeIcon icon={faTimes} />
               </span>
             </label>
+            <br />
             <input
               type="password"
               onChange={(e) => setMatchPwd(e.target.value)}
@@ -181,29 +215,38 @@ const Register = () => {
               aria-describedby="matchnote"
               onFocus={() => setMatchFocus(true)}
               onBlur={() => setMatchFocus(false)}
-              value={user}
+              value={matchPwd}
               required
+              className="form-control "
             />
             <p
               id="matchnote"
               className={
-                matchFocus && pwd && !validMatch ? "instructions" : "offscreen"
+                matchFocus && matchPwd && !validMatch
+                  ? "instructions"
+                  : "offscreen"
               }
             >
               <FontAwesomeIcon icon={faInfoCircle} />
               Must be same with first Password input
             </p>
-            <br />
 
             <button
               disabled={
                 !validMatch || !validName || !validPasswrd ? "true" : "false"
               }
-              className="btn btn-danger"
+              className="form-control "
             >
+              <i className="fa fa-sign-in me-3"></i>
               Sign Up
             </button>
           </form>
+          <p>
+            Already a Member Please
+            <span>
+              <a href="/login">Sign In</a>
+            </span>
+          </p>
         </section>
       )}
     </>
