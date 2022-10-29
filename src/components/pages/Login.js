@@ -77,41 +77,40 @@ const Login = () => {
             {errMsg}
           </p>
 
-          <div className="col-md-4 form-control">
-            <form onSubmit={handleSubmit} className="form-control px-20 mt-8">
-              <h1>LOGIN HERE</h1>
-              <input
-                type="text"
-                value={user}
-                ref={userRef}
-                placeholder="User Name"
-                id="username"
-                onChange={(e) => setUser(e.target.value)}
-                className="form-control form-group"
-                required
-              />{" "}
-              <br />
-              <input
-                type="password"
-                value={passwrd}
-                placeholder="Password"
-                id="password"
-                onChange={(e) => setPasswrd(e.target.value)}
-                className="form-control form-group"
-                required
-              />{" "}
-              <br />
-              <button className="form-control btn btn-danger ms-2">
-                <i className="fa fa-sign-in text-6"></i> Sign In
-              </button>
-              <p>
-                New Member Please
-                <span>
-                  <a href="/register">Sign Up</a>
-                </span>
-              </p>
-            </form>
-          </div>
+          <form onSubmit={handleSubmit}>
+            <h1>LOGIN HERE</h1>
+            <label htmlFor="username">UserName:</label>
+            <input
+              type="text"
+              value={user}
+              ref={userRef}
+              placeholder="User Name"
+              id="username"
+              autoComplete="off"
+              onChange={(e) => setUser(e.target.value)}
+              required
+            />{" "}
+            <br />
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              value={passwrd}
+              placeholder="Password"
+              id="password"
+              onChange={(e) => setPasswrd(e.target.value)}
+              required
+            />{" "}
+            <br />
+            <button className="btn btn-danger">
+              <i className="fa fa-sign-in me-2"></i> Sign In
+            </button>
+            <p>
+              New Member Please
+              <span>
+                <a href="/register">Sign Up</a>
+              </span>
+            </p>
+          </form>
         </section>
       )}
     </>

@@ -130,7 +130,6 @@ const Register = () => {
                 className={validName || !user ? "hide" : "invalid"}
               />
             </label>
-            <br />
             <input
               type="text"
               onChange={(e) => setUser(e.target.value)}
@@ -143,7 +142,6 @@ const Register = () => {
               onBlur={() => setUserFocus(false)}
               value={user}
               required
-              className="form-control "
             />
             <p
               id="uidnote"
@@ -168,7 +166,6 @@ const Register = () => {
                 className={validPasswrd || !pwd ? "hide" : "invalid"}
               />
             </label>
-            <br />
             <input
               type="password"
               onChange={(e) => setPwd(e.target.value)}
@@ -179,7 +176,6 @@ const Register = () => {
               onBlur={() => setPasswrdFocus(false)}
               value={pwd}
               required
-              className="form-control fas fa-lock"
             />
             <p
               id="pwdnote"
@@ -213,21 +209,19 @@ const Register = () => {
                 className={validMatch || !matchPwd ? "hide" : "invalid"}
               />
             </label>
-            <br />
             <input
               type="password"
               onChange={(e) => setMatchPwd(e.target.value)}
               id="cpassword"
               aria-invalid={validMatch ? "true" : "false"}
-              aria-describedby="matchnote"
+              aria-describedby="confirmnote"
               onFocus={() => setMatchFocus(true)}
               onBlur={() => setMatchFocus(false)}
               value={matchPwd}
               required
-              className="form-control "
             />
             <p
-              id="matchnote"
+              id="confirmnote"
               className={
                 matchFocus && matchPwd && !validMatch
                   ? "instructions"
@@ -240,9 +234,8 @@ const Register = () => {
             <br />
             <button
               disabled={
-                !validMatch || !validName || !validPasswrd ? "true" : "false"
+                !validName || !validPasswrd || !validMatch ? "true" : "false"
               }
-              className="form-control "
             >
               <i className="fa fa-sign-in me-3"></i>
               Sign Up

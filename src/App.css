@@ -9,12 +9,12 @@
 html {
   font-family: "Nunito", sans-serif;
   font-size: 22px;
-  color: #fff;
+  color: rgb(2, 10, 31);
 }
 
 body {
   min-height: 100vh;
-  background-color: rgb(16, 76, 135);
+  background-color: rgb(4, 85, 165);
 }
 
 .App {
@@ -34,7 +34,8 @@ section {
   flex-direction: column;
   justify-content: flex-start;
   padding: 1rem;
-  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  background-color: rgba(33, 3, 58, 0.4);
 }
 
 form {

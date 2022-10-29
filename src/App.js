@@ -6,7 +6,6 @@ import Login from "./components/pages/Login";
 function App() {
   return (
     <div className="App">
-      <h1>Hello</h1>
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
