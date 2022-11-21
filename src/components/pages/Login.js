@@ -1,21 +1,23 @@
-import React from "react";
-import { useEffect } from "react";
-import { useRef } from "react";
-import { useState, useContext } from "react";
-import AuthContext from "../context/AuthProvide";
-import axios from "../../api/axios";
+import React, { useEffect, useRef, useState } from "react";
+import useAuth from "../../hooks/useAuth";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
+import axios from "../../api/axios";
 const LOGIN_URL = "/auth";
 
 const Login = () => {
-  const { setAuth } = useContext(AuthContext);
+  const { setAuth } = useAuth();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
   const [user, setUser] = useState("");
   const [passwrd, setPasswrd] = useState("");
   const userRef = useRef();
   const errRef = useRef();
 
   const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     userRef.current.focus();
@@ -44,7 +46,7 @@ const Login = () => {
       setAuth({ user, passwrd, roles, accessToken });
       setUser("");
       setPasswrd("");
-      setSuccess(true);
+      navigate(from, { replace: true });
     } catch (error) {
       if (!error?.response) {
         setErrMsg("No Server Response");
@@ -59,61 +61,50 @@ const Login = () => {
     }
   };
   return (
-    <>
-      {success ? (
-        <section>
-          <h1>You Logged in</h1> <br />
-          <p>
-            <a href="/">Go to Home</a>
-          </p>
-        </section>
-      ) : (
-        <section>
-          <p
-            ref={errRef}
-            className={errMsg ? "errmsg" : "offscreen"}
-            aria-live="assertive"
-          >
-            {errMsg}
-          </p>
+    <section>
+      <p
+        ref={errRef}
+        className={errMsg ? "errmsg" : "offscreen"}
+        aria-live="assertive"
+      >
+        {errMsg}
+      </p>
 
-          <form onSubmit={handleSubmit}>
-            <h1>LOGIN HERE</h1>
-            <label htmlFor="username">UserName:</label>
-            <input
-              type="text"
-              value={user}
-              ref={userRef}
-              placeholder="User Name"
-              id="username"
-              autoComplete="off"
-              onChange={(e) => setUser(e.target.value)}
-              required
-            />{" "}
-            <br />
-            <label htmlFor="password">Password:</label>
-            <input
-              type="password"
-              value={passwrd}
-              placeholder="Password"
-              id="password"
-              onChange={(e) => setPasswrd(e.target.value)}
-              required
-            />{" "}
-            <br />
-            <button className="btn btn-danger">
-              <i className="fa fa-sign-in me-2"></i> Sign In
-            </button>
-            <p>
-              New Member Please
-              <span>
-                <a href="/register">Sign Up</a>
-              </span>
-            </p>
-          </form>
-        </section>
-      )}
-    </>
+      <form onSubmit={handleSubmit}>
+        <h1>LOGIN HERE</h1>
+        <label htmlFor="username">UserName:</label>
+        <input
+          type="text"
+          value={user}
+          ref={userRef}
+          placeholder="User Name"
+          id="username"
+          autoComplete="off"
+          onChange={(e) => setUser(e.target.value)}
+          required
+        />{" "}
+        <br />
+        <label htmlFor="password">Password:</label>
+        <input
+          type="password"
+          value={passwrd}
+          placeholder="Password"
+          id="password"
+          onChange={(e) => setPasswrd(e.target.value)}
+          required
+        />{" "}
+        <br />
+        <button className="btn btn-danger">
+          <i className="fa fa-sign-in me-2"></i> Sign In
+        </button>
+        <p>
+          New Member Please
+          <span>
+            <a href="/register">Sign Up</a>
+          </span>
+        </p>
+      </form>
+    </section>
   );
 };
 
