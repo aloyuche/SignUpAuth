@@ -13,7 +13,7 @@ function App() {
   return (
     <main className="App">
       <Routes>
-        <Route path="/" element={<Login />} />
+        {/* <Route path="/" element={<Login />} /> */}
         <Route path="/" element={<Layout />}>
           {/* Public Layout Routes */}
           <Route path="/login" element={<Login />} />
